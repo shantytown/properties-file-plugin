@@ -90,3 +90,13 @@ RSpec.shared_context('graph') do
   end
   let(:graph) { Shanty::Graph.new(project_path_trie, projects.values) }
 end
+
+RSpec.shared_context('properties') do
+  let(:project_path) { Dir.mktmpdir }
+  let(:project) { project_class.new(project_path) }
+  let(:files) { [] }
+
+  after(:each) do
+    FileUtils.rm_rf(project_path)
+  end
+end

@@ -1,12 +1,12 @@
 Gem::Specification.new do |gem|
   gem.name = 'shanty-properties-file-plugin'
-  gem.version = '0.1.0'
+  gem.version = '0.2.0'
   gem.homepage = 'https://github.com/shanty/properties-file-plugin'
   gem.license = 'MIT'
 
   gem.author = 'Chris Jansen'
   gem.email = 'chris.jansen@intenthq.comm'
-  gem.summary = 'A short summary here.'
+  gem.summary = 'Properties file plugin for Shanty.'
   gem.description = "See #{gem.homepage} for more information!"
 
   # Uncomment this if you plan on having an executable instead of a library.
@@ -22,6 +22,9 @@ Gem::Specification.new do |gem|
   #   gem.add_development_dependency 'whatever', '~> 1.0'
   #
   # Some sane defaults follow.
+  gem.add_dependency 'deep_merge', '~>1.0'
+  gem.add_dependency 'gpgme', '~> 2.0'
+
   gem.add_development_dependency 'coveralls', '~> 0.8.2'
   gem.add_development_dependency 'filewatcher', '~> 0.5.2'
   gem.add_development_dependency 'pry-byebug', '~> 3.2'

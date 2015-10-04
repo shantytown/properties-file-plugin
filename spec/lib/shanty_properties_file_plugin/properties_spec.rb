@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'shanty_properties_file_plugin/properties'
 require 'yaml'
+require 'spec_helper'
 
 # Tests for properties class
 module PropertiesFilePlugin

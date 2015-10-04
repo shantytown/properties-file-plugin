@@ -17,22 +17,24 @@ module PropertiesFilePlugin
     PLAIN_FILE = "plain.#{OUTPUT_EXTENSION}"
     ENCRYPTED_FILE = "encrypted.#{OUTPUT_EXTENSION}"
 
-    option :output_dir, 'build'
     subscribe :build, :on_build
-    projects "**/#{DEFAULT}.#{PROPERTIES}"
+    provides_projects_containing "**/#{DEFAULT}.#{PROPERTIES}"
+    provides_config :output_dir, 'build'
+    provides_config :passphrase
+    description 'Uses properties files as a envrionment data source'
 
-    def on_build(project)
-      plain = properties(project)
-      encrypted = encrypted_properties(project)
-      write(output_file(project, PLAIN_FILE), plain)
-      write(output_file(project, ENCRYPTED_FILE), encrypted)
-      write(output_file(project, COMBINDED_FILE), encrypted.deep_merge(plain))
+    def on_build
+      plain = properties
+      encrypted = encrypted_properties
+      write(output_file(PLAIN_FILE), plain)
+      write(output_file(ENCRYPTED_FILE), encrypted)
+      write(output_file(COMBINDED_FILE), encrypted.deep_merge(plain))
     end
 
-    def artifacts(project)
-      [Shanty::Artifact.new(OUTPUT_EXTENSION, self.class.name, URI("file://#{output_file(project, PLAIN_FILE)}")),
-       Shanty::Artifact.new(OUTPUT_EXTENSION, self.class.name, URI("file://#{output_file(project, ENCRYPTED_FILE)}")),
-       Shanty::Artifact.new(OUTPUT_EXTENSION, self.class.name, URI("file://#{output_file(project, COMBINDED_FILE)}"))]
+    def artifacts
+      [Shanty::Artifact.new(OUTPUT_EXTENSION, self.class.name, URI("file://#{output_file(PLAIN_FILE)}")),
+       Shanty::Artifact.new(OUTPUT_EXTENSION, self.class.name, URI("file://#{output_file(ENCRYPTED_FILE)}")),
+       Shanty::Artifact.new(OUTPUT_EXTENSION, self.class.name, URI("file://#{output_file(COMBINDED_FILE)}"))]
     end
 
     private
@@ -42,27 +44,27 @@ module PropertiesFilePlugin
       File.open(file, 'w') { |f| f.write props.to_yaml }
     end
 
-    def properties(project)
+    def properties
       Properties.new(project.path,
                      "#{DEFAULT}.#{PROPERTIES}",
-                     find_files(project, PROPERTIES)).properties
+                     find_files(PROPERTIES)).properties
     end
 
-    def encrypted_properties(project)
+    def encrypted_properties
       EncryptedProperties.new(project.path,
                               "#{DEFAULT}.#{GPG}",
-                              find_files(project, GPG),
-                              self.class.options.passphrase).properties
+                              find_files(GPG),
+                              config[:passphrase]).properties
     end
 
-    def find_files(project, extenstion)
-      project_tree.glob("#{project.path}/*.#{extenstion}").keep_if do |v|
+    def find_files(extenstion)
+      env.file_tree.glob("#{project.path}/*.#{extenstion}").keep_if do |v|
         !v.include?("#{DEFAULT}.#{extenstion}")
       end
     end
 
-    def output_file(project, file)
-      File.join(project.path, self.class.options.output_dir, file)
+    def output_file(file)
+      File.join(project.path, config[:output_dir], file)
     end
   end
 end

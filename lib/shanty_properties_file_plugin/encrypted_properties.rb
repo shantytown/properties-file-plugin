@@ -17,7 +17,7 @@ module PropertiesFilePlugin
       @crypto = GPGME::Crypto.new
     end
 
-    protected
+    private
 
     # Private: Load data from an encrypted properties file
     #
@@ -25,6 +25,7 @@ module PropertiesFilePlugin
     #
     # Returns an array of lines in the file
     def load_data(file)
+      return [] unless File.exist?(file)
       @crypto.decrypt(File.open(file, 'rb').read, password: @passphrase).to_s.each_line.to_a
     rescue GPGME::Error::NoData
       []

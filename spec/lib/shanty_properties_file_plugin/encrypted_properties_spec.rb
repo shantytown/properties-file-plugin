@@ -8,7 +8,7 @@ module PropertiesFilePlugin
   RSpec.describe(EncryptedProperties) do
     include_context('properties')
 
-    # Set GPG engine to GPG v1 for testing
+    # Set GPG engine to GPG v1 for testing to stop interactive pin enty
     GPGME::Engine.set_info(0, `which gpg`.strip, nil)
 
     let(:passphrase) { 'nic' }

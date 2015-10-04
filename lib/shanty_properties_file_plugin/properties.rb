@@ -21,7 +21,7 @@ module PropertiesFilePlugin
       end
     end
 
-    protected
+    private
 
     # Private: Load data from a properties file
     #
@@ -29,10 +29,9 @@ module PropertiesFilePlugin
     #
     # Returns an array of lines in the file
     def load_data(file)
+      return [] unless File.exist?(file)
       File.open(file, 'rb').read.each_line.to_a
     end
-
-    private
 
     # Private: load the default properties
     #

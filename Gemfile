@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
 gemspec
-gem 'shanty', path: '/users/Chris/shanty/shanty'
+gem 'shanty', git: 'https://github.com/shantytown/shanty'

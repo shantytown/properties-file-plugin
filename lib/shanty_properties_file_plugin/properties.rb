@@ -1,6 +1,3 @@
-require 'fileutils'
-require 'yaml'
-
 module PropertiesFilePlugin
   # Public: properties class for getting environment config from properties files
   class Properties
@@ -9,29 +6,31 @@ module PropertiesFilePlugin
     # project_path - path to the project directory
     # default_file - name of the default properties files
     # files        - properties files to be processed
-    # output_file  - file name of the YAML output file
-    def initialize(project_path, default_file, files, output_file)
+    def initialize(project_path, default_file, files)
       @project_path = project_path
       @default_file = default_file
       @files = files
-      @output_file = output_file
     end
 
-    # Public: write the properties to a YAML file
-    def write!
-      FileUtils.mkdir_p(File.dirname(@output_file))
-      File.open(@output_file, 'w') { |f| f.write properties.to_yaml }
-    end
-
-    private
-
-    # Private: extract properties from each file and merge with defaults
+    # Public: extract properties from each file and merge with defaults
     #
     # Returns a hash of envrionments with properties
     def properties
       @files.each_with_object({}) do |file, acc|
         acc[environment(file)] = defaults.merge(load_properties(file))
       end
+    end
+
+    private
+
+    # Private: Load data from a properties file
+    #
+    # file - file to load data from
+    #
+    # Returns an array of lines in the file
+    def load_data(file)
+      return [] unless File.exist?(file)
+      File.open(file, 'rb').read.each_line.to_a
     end
 
     # Private: load the default properties
@@ -69,15 +68,6 @@ module PropertiesFilePlugin
     # Returns the formatted value.
     def format(value)
       value.delete('\'').delete('"')
-    end
-
-    # Private: Load data from a properties file
-    #
-    # file - file to load data from
-    #
-    # Returns an array of lines in the file
-    def load_data(file)
-      File.open(file, 'rb').read.split('\n')
     end
 
     # Private: read properties from a data set

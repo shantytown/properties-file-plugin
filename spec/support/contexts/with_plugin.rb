@@ -1,7 +1,7 @@
-require_relative 'workspace'
+require_relative 'with_tmp_shanty'
 
-RSpec.shared_context('plugin') do
-  include_context('workspace')
+RSpec.shared_context('with plugin') do
+  include_context('with tmp shanty')
   subject { described_class.new(project, env) }
 
   before do

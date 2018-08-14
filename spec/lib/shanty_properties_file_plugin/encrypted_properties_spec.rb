@@ -6,7 +6,7 @@ require 'spec_helper'
 # Tests for properties class
 module PropertiesFilePlugin
   RSpec.describe(EncryptedProperties) do
-    include_context('properties')
+    include_context('with properties')
 
     # Set GPG engine to GPG v1 for testing to stop interactive pin enty
     GPGME::Engine.set_info(0, `which gpg`.strip, nil)

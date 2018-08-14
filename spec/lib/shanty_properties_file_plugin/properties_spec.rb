@@ -6,7 +6,7 @@ require 'spec_helper'
 # Tests for properties class
 module PropertiesFilePlugin
   RSpec.describe(Properties) do
-    include_context('properties')
+    include_context('with properties')
 
     let(:default_file) { 'default.properties' }
     subject { described_class.new(project_path, default_file, files) }

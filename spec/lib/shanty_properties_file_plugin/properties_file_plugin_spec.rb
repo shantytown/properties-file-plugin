@@ -7,7 +7,7 @@ require 'shanty_properties_file_plugin/properties'
 # Tests for properties file plugin
 module PropertiesFilePlugin
   RSpec.describe(PropertiesFilePlugin) do
-    include_context('plugin')
+    include_context('with plugin')
 
     def file_path(file)
       File.join(project_path, 'build', "#{file}.syaml")
